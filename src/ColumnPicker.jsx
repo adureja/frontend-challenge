@@ -1,8 +1,7 @@
 import React from 'react';
 import { Button, Dialog, Box, DialogTitle, List, ListItem, ListItemText } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
-import { pipe_data } from './constants';
+import TableChartIcon from '@material-ui/icons/TableChart';
 
 class ColumnPicker extends React.Component {
 
@@ -41,14 +40,14 @@ class ColumnPicker extends React.Component {
     const selectedColumns = this.props.selectedColumns;
 
     return (
-      <Box p={2}>
-        <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+      <Box p={3}>
+        <Button endIcon={<TableChartIcon />} variant="outlined" color="primary" onClick={this.handleClickOpen}>
           Pick Columns
         </Button>
         <Dialog onClose={this.handleClose}
           open={colPickerOpen}>
           <DialogTitle id="simple-dialog-title">
-            Pick the columns you want to see in the Table Builder.
+            Toggle the columns shown in the Table Builder.
           </DialogTitle>
           <List>
             {columns && columns.map((col) => (

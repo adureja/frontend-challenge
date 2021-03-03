@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
@@ -9,6 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 import { pipe_data } from './constants';
 
@@ -16,15 +17,35 @@ class TableViewer extends React.Component {
 
     constructor(props) {
         super(props);
+    }
 
-        this.state = {
-            selectedColumns: [
-                "customerName",
-                "termLength",
-                "status"
-            ],
-            filters: this.props.filters
-        }
+    filterData(data, filters) {
+        // To whomever reads this: sorry
+        if (!data) return data;
+        return data.filter(x => {
+            console.log(x);
+            let isValidForArr = true;
+            filters.forEach(function (f) {
+                console.log(f);
+                switch (f.operator) {
+                    case "<":
+                        if (x[f.field] >= f.value) isValidForArr = false;
+                        break;
+                    case ">":
+                        if (x[f.field] <= f.value) isValidForArr = false;
+                        break;
+                    case "!=":
+                        if (x[f.field] == f.value) isValidForArr = false;
+                        break;
+                    case "==":
+                        if (x[f.field] != f.value) isValidForArr = false;
+                        break;
+                    default:
+                        break;
+                }
+            });
+            return isValidForArr;
+        });
     }
 
     render() {
@@ -43,15 +64,20 @@ class TableViewer extends React.Component {
             }
         }));
 
-        let { dataset, selectedColumns } = this.props;
+        let { dataset, selectedColumns, filters } = this.props;
+        let filteredDataset = this.filterData(dataset, filters);
+
         let selectedColsArr = Array.from(selectedColumns);
 
         if (selectedColsArr.length < 1) {
             selectedColsArr.push("Pick a column!");
-            dataset = [{
+            filteredDataset = [{
                 "Pick a column!": "Click the button in the toolbar to choose columns"
             }];
         }
+
+        console.log("filtered_dataset: ");
+        console.log(filteredDataset);
 
         return (
             <Box pt={3}>
@@ -68,7 +94,7 @@ class TableViewer extends React.Component {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {dataset.map((row) => (
+                            {filteredDataset.map((row) => (
                                 <TableRow key={row.customerName}>
                                     {selectedColsArr.map((col) => {
                                         return (

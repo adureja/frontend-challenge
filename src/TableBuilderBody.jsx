@@ -11,7 +11,7 @@ class TableBuilderBody extends React.Component {
     }
 
     render() {
-        const { selectedColumns, dataset } = this.props
+        const { selectedColumns, dataset, filters } = this.props
         return (
             <Grid container spacing={5}>
                 <Grid item xs={1} md={2}>
@@ -19,6 +19,7 @@ class TableBuilderBody extends React.Component {
                 <Grid item xs={10} md={8}>
                     <TableViewer
                         selectedColumns={selectedColumns}
+                        filters={filters}
                         dataset={dataset} />
                 </Grid>
                 <Grid item xs={1} md={2}>
