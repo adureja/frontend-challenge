@@ -11,25 +11,6 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      dataset: pipe_data,
-      columns: [
-        "customerName",
-        "termLength",
-        "status"
-      ],
-      selectedColumns: new Set([
-        "customerName",
-        "termLength",
-        "status"
-      ]),
-      colPickerOpen: false
-    }
-
-    this.handleClickOpen = this.handleClickOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleListItemClick = this.handleListItemClick.bind(this);
   }
 
   render() {

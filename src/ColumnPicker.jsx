@@ -68,21 +68,6 @@ class ColumnPicker extends React.Component {
   }
 
   render() {
-    const classes = makeStyles((theme) => ({
-      // necessary for content to be below app bar
-      toolbar: {
-        height: "10vh",
-      },
-      table: {
-        minWidth: 650,
-        padding: theme.spacing(2)
-      },
-      tableContainer: {
-        padding: theme.spacing(5),
-        marginTop: theme.spacing(2)
-      }
-    }));
-
     const colPickerOpen = this.state.colPickerOpen;
 
     const columns = this.props.columns;
