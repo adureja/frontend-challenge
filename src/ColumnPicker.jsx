@@ -10,34 +10,12 @@ class ColumnPicker extends React.Component {
     super(props);
 
     this.state = {
-      dataset: pipe_data,
-      columns: [
-        "customerName",
-        "termLength",
-        "status"
-      ],
-      selectedColumns: new Set([
-        "customerName",
-        "termLength",
-        "status"
-      ]),
       colPickerOpen: false
     }
 
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleListItemClick = this.handleListItemClick.bind(this);
-  }
-
-  getCols(data) {
-    // Probably a more elegant soln
-    let cols = []
-
-    data.map((row) => {
-      cols.push(Object.keys(row));
-    });
-
-    return cols;
   }
 
   handleClickOpen() {
@@ -53,25 +31,14 @@ class ColumnPicker extends React.Component {
   }
 
   handleListItemClick(col) {
-    let selCol = this.state.selectedColumns;
-    if (selCol.has(col)) {
-      selCol.delete(col);
-    } else {
-      selCol.add(col);
-    }
-    this.setState({
-      selectedColumns: selCol
-    });
-
-    this.props.onSelectedColumnChange(selCol);
-
+    this.props.onSelectedColumnChange(col);
   }
 
   render() {
     const colPickerOpen = this.state.colPickerOpen;
 
     const columns = this.props.columns;
-    const selectedColumns = this.state.selectedColumns;
+    const selectedColumns = this.props.selectedColumns;
 
     return (
       <Box p={2}>
@@ -84,9 +51,13 @@ class ColumnPicker extends React.Component {
             Pick the columns you want to see in the Table Builder.
           </DialogTitle>
           <List>
-            {this.state.columns.map((col) => (
-              <ListItem button selected={this.state.selectedColumns.has(col)} onClick={() => this.handleListItemClick(col)} key={col}>
-                <ListItemText primary={col} />
+            {columns && columns.map((col) => (
+              <ListItem 
+                button 
+                selected={selectedColumns.has(col)} 
+                onClick={() => this.handleListItemClick(col)} 
+                key={col}>
+                  <ListItemText primary={col} />
               </ListItem>
             ))}
           </List>

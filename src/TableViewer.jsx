@@ -27,17 +27,6 @@ class TableViewer extends React.Component {
         }
     }
 
-    getCols(data) {
-        // Probably a more elegant soln
-        let cols = []
-
-        data.map((row) => {
-            cols.push(Object.keys(row));
-        });
-
-        return cols;
-    }
-
     render() {
         const classes = makeStyles((theme) => ({
             // necessary for content to be below app bar
@@ -54,15 +43,15 @@ class TableViewer extends React.Component {
             }
         }));
 
-        let columns = this.state.selectedColumns.map((columnName) =>
-            <TableCell align="right">
-                <b>{columnName}</b>
-            </TableCell>
-        );
+        let { dataset, selectedColumns } = this.props;
+        let selectedColsArr = Array.from(selectedColumns);
 
-        let rows = pipe_data.map((row) => (
-            <TableCell align="right">{row.calories}</TableCell>
-        ));
+        if (selectedColsArr.length < 1) {
+            selectedColsArr.push("Pick a column!");
+            dataset = [{
+                "Pick a column!": "Click the button in the toolbar to choose columns"
+            }];
+        }
 
         return (
             <Box pt={3}>
@@ -71,13 +60,17 @@ class TableViewer extends React.Component {
                     <Table className={classes.table} size="small" aria-label="a dense table">
                         <TableHead>
                             <TableRow>
-                                {columns}
+                                {selectedColsArr.map((columnName) =>
+                                    <TableCell align="center">
+                                        <b>{columnName}</b>
+                                    </TableCell>
+                                )}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {pipe_data.map((row) => (
+                            {dataset.map((row) => (
                                 <TableRow key={row.customerName}>
-                                    {this.state.selectedColumns.map((col) => {
+                                    {selectedColsArr.map((col) => {
                                         return (
                                             <TableCell align="right">{row[col]}</TableCell>
                                         );

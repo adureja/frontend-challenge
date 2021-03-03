@@ -29,29 +29,19 @@ const useStyles = theme => ({
 class MainToolbar extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            dataset: pipe_data,
-            columns: [
-                "customerName",
-                "termLength",
-                "status"
-            ],
-            selectedColumns: new Set([
-                "customerName",
-                "termLength",
-                "status"
-            ]),
             colPickerOpen: false
         }
+
+        this.onSelectedColumnChange = this.onSelectedColumnChange.bind(this);
     }
     
     onSelectedColumnChange(selected_col) {
-        alert('weeooh');
+        this.props.onColumnChange(selected_col);
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, allColumns, selectedColumns } = this.props;
         return (
             <div className={classes.root}>
                 <AppBar className={classes.appbar} position="static">
@@ -59,7 +49,10 @@ class MainToolbar extends React.Component {
                         <Typography variant="h5" className={classes.title}>
                             Subscription List
                         </Typography>
-                        <ColumnPicker onSelectedColumnChange={this.onSelectedColumnChange} />
+                        <ColumnPicker 
+                            columns={allColumns}
+                            selectedColumns={selectedColumns}
+                            onSelectedColumnChange={this.onSelectedColumnChange} />
                         <ButtonGroup>
                             <Button variant="contained"
                                 color="secondary"
