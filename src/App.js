@@ -24,6 +24,8 @@ class App extends React.Component {
     this.onColumnChange = this.onColumnChange.bind(this);
     this.onCreateFilter = this.onCreateFilter.bind(this);
     this.onDeleteFilter = this.onDeleteFilter.bind(this);
+
+    this.onImport = this.onImport.bind(this);
   }
 
   getCols(data) {
@@ -65,9 +67,21 @@ class App extends React.Component {
     });
   }
 
-  onImport(jsonDump) {
+  onImport(jsonStr) {
     try {
-      let viewObj = JSON.parse(jsonDump);
+      // Parse to object
+      let viewObj = JSON.parse(jsonStr);
+      // Update state if valid
+      if (viewObj.selectedColumns) {
+        this.setState({
+          selectedColumns: new Set(viewObj.selectedColumns)
+        })
+      }
+      if (viewObj.filters) {
+        this.setState({
+          filters: viewObj.filters
+        })
+      }
     } catch (e) {
       if (e instanceof SyntaxError) {
         console.log(e);
@@ -75,14 +89,13 @@ class App extends React.Component {
     }
   }
 
-  onExport() {
-    // Construct view object
-    // Push to modal
-    alert('4');
-  }
-
   render() {
     let { columns, selectedColumns, dataset, filters } = this.state;
+
+    let jsonView = JSON.stringify({
+      "selectedColumns": Array.from(selectedColumns),
+      "filters": filters
+    });
 
     return (
       <Container disableGutters>
@@ -90,8 +103,10 @@ class App extends React.Component {
           allColumns={columns}
           selectedColumns={selectedColumns}
           filters={filters}
+          jsonView={jsonView}
           onCreateFilter={this.onCreateFilter}
           onDeleteFilter={this.onDeleteFilter}
+          onImportJson={this.onImport}
           onColumnChange={this.onColumnChange} />
         <TableBuilderBody
           selectedColumns={selectedColumns}

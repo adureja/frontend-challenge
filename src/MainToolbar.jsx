@@ -10,6 +10,8 @@ import Button from '@material-ui/core/Button';
 import { ButtonGroup } from '@material-ui/core';
 import ColumnPicker from './ColumnPicker';
 import FilterPicker from './FilterPicker';
+import ExportViewDialog from './ExportViewDialog';
+import ImportViewDialog from './ImportViewDialog';
 
 const useStyles = theme => ({
     root: {
@@ -29,12 +31,21 @@ class MainToolbar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            colPickerOpen: false
+            colPickerOpen: false,
+            exportModalOpened: false,
+            importModalOpened: false
         }
 
         this.onSelectedColumnChange = this.onSelectedColumnChange.bind(this);
         this.onNewFilterObject = this.onNewFilterObject.bind(this);
         this.onDeleteFilterObj = this.onDeleteFilterObj.bind(this);
+        this.onImportJson = this.onImportJson.bind(this);
+
+        this.openImportModal = this.openImportModal.bind(this);
+        this.closeImportModal = this.closeImportModal.bind(this);
+
+        this.openExportModal = this.openExportModal.bind(this);
+        this.closeExportModal = this.closeExportModal.bind(this);
     }
     
     onNewFilterObject(filter) {
@@ -49,8 +60,41 @@ class MainToolbar extends React.Component {
         this.props.onColumnChange(selected_col);
     }
 
+    openExportModal() {
+        console.log('open');
+        this.setState({
+            exportModalOpened: true
+        });
+    }
+
+    closeExportModal() {
+        this.setState({
+            exportModalOpened: false
+        });
+    }
+
+    openImportModal() {
+        this.setState({
+            importModalOpened: true
+        });
+    }
+
+    closeImportModal() {
+        this.setState({
+            importModalOpened: false
+        });
+    }
+
+    onImportJson(jsonStr) {
+        console.log(jsonStr);
+        this.props.onImportJson(jsonStr);
+    }
+
     render() {
-        const { classes, allColumns, selectedColumns, filters } = this.props;
+        const { classes, allColumns, selectedColumns, filters, jsonView } = this.props;
+
+        let { importModalOpened, exportModalOpened } = this.state;
+
         return (
             <div className={classes.root}>
                 <AppBar className={classes.appbar} position="static">
@@ -70,14 +114,22 @@ class MainToolbar extends React.Component {
                         <ButtonGroup>
                             <Button variant="contained"
                                 color="secondary"
-                                onClick={() => { alert('4') }} >
+                                onClick={this.openImportModal} >
                                 Import
                             </Button>
+                            <ImportViewDialog 
+                                onImport={this.onImportJson}
+                                closeImportModal={this.closeImportModal}
+                                open={importModalOpened} />
                             <Button variant="contained"
                                 color="primary"
-                                onClick={() => { alert('4') }} >
+                                onClick={this.openExportModal} >
                                 Export
                             </Button>
+                            <ExportViewDialog 
+                                jsonView={jsonView}
+                                closeExportModal={this.closeExportModal}
+                                open={exportModalOpened} />
                         </ButtonGroup>
                     </Toolbar>
                 </AppBar>
