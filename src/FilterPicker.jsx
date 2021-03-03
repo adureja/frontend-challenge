@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dialog, Box, DialogTitle, DialogContent, MenuItem, DialogActions, TextField, Grid, Chip, Paper } from '@material-ui/core';
-import { Card } from '@material-ui/core';
+
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -115,8 +115,15 @@ class FilterPicker extends React.Component {
         const { filters, classes } = this.props;
         const filterPickerOpen = this.state.filterPickerOpen;
 
+        // Derive these in a more elegant manner (scan for str cols),
+        // though it would be trivial if a separate data model was created
         const filterableFields = ["mrr", "termLength", "invoiceNo"];
         const operators = ["<", ">", "==", "!="];
+
+        // Possible improvements:
+        // - Break up list of filters from adding of filters
+        // - More reusable components?
+        // - Consider moving styling elsewhere - this was inspired from Material UI docs
 
         return (
             <Box p={0}>

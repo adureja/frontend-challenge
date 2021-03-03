@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Table from '@material-ui/core/Table';
@@ -9,9 +9,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import FilterListIcon from '@material-ui/icons/FilterList';
-
-import { pipe_data } from './constants';
 
 class TableViewer extends React.Component {
 
@@ -20,7 +17,10 @@ class TableViewer extends React.Component {
     }
 
     filterData(data, filters) {
-        // To whomever reads this: sorry
+        // Possible improvements: 
+        // - make this way shorter
+        // - consider more efficient traversal rather than each filter for each row (fine for this demo data)
+        // - could use JS string parsing to advantage? can be confusing n unreadable
         if (!data) return data;
         return data.filter(x => {
             console.log(x);
@@ -69,15 +69,13 @@ class TableViewer extends React.Component {
 
         let selectedColsArr = Array.from(selectedColumns);
 
+        // Insert some instructions if no columns selected
         if (selectedColsArr.length < 1) {
             selectedColsArr.push("Pick a column!");
             filteredDataset = [{
                 "Pick a column!": "Click the button in the toolbar to choose columns"
             }];
         }
-
-        console.log("filtered_dataset: ");
-        console.log(filteredDataset);
 
         return (
             <Box pt={3}>

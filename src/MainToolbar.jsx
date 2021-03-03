@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { pipe_data } from './constants'; 
-
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ButtonGroup } from '@material-ui/core';
+
 import ColumnPicker from './ColumnPicker';
 import FilterPicker from './FilterPicker';
 import ExportViewDialog from './ExportViewDialog';
@@ -61,7 +60,6 @@ class MainToolbar extends React.Component {
     }
 
     openExportModal() {
-        console.log('open');
         this.setState({
             exportModalOpened: true
         });
@@ -86,14 +84,18 @@ class MainToolbar extends React.Component {
     }
 
     onImportJson(jsonStr) {
-        console.log(jsonStr);
         this.props.onImportJson(jsonStr);
     }
 
     render() {
         const { classes, allColumns, selectedColumns, filters, jsonView } = this.props;
+        const { importModalOpened, exportModalOpened } = this.state;
 
-        let { importModalOpened, exportModalOpened } = this.state;
+        // Possible improvements:
+        // - Separate logic in ButtonGroup for import/exporting elegantly
+        // - Custom types/components for buttons?
+        // - More responsive CSS
+        // - Generic type for Export/Import? differences: disable, extra button in Import etc.
 
         return (
             <div className={classes.root}>
