@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+function onSelectedColumnChange() {
+    alert('weeooh');
+}
+
 export default function MainToolbar() {
     const classes = useStyles();
 
@@ -32,7 +36,7 @@ export default function MainToolbar() {
                     <Typography variant="h5" className={classes.title}>
                         Subscription List
                     </Typography>
-                    <ColumnPicker />
+                    <ColumnPicker onSelectedColumnChange={onSelectedColumnChange} />
                     <ButtonGroup>
                         <Button variant="contained"
                                 color="secondary"

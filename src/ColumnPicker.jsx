@@ -11,12 +11,16 @@ class ColumnPicker extends React.Component {
 
     this.state = {
       dataset: pipe_data,
-      columns: this.props.columns,
-      selectedColumns: [
+      columns: [
         "customerName",
         "termLength",
         "status"
       ],
+      selectedColumns: new Set([
+        "customerName",
+        "termLength",
+        "status"
+      ]),
       colPickerOpen: false
     }
 
@@ -40,18 +44,27 @@ class ColumnPicker extends React.Component {
     this.setState({
       colPickerOpen: true
     });
-    alert('set state');
   }
 
   handleClose() {
     this.setState({
       colPickerOpen: false
     });
-    alert('o dear');
   }
 
-  handleListItemClick() {
-    alert('o werd');
+  handleListItemClick(col) {
+    let selCol = this.state.selectedColumns;
+    if (selCol.has(col)) {
+      selCol.delete(col);
+    } else {
+      selCol.add(col);
+    }
+    this.setState({
+      selectedColumns: selCol
+    });
+
+    this.props.onSelectedColumnChange(selCol);
+
   }
 
   render() {
@@ -70,25 +83,27 @@ class ColumnPicker extends React.Component {
       }
     }));
 
+    const colPickerOpen = this.state.colPickerOpen;
+
+    const columns = this.props.columns;
+    const selectedColumns = this.state.selectedColumns;
+
     return (
       <Box p={2}>
         <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
           Pick Columns
         </Button>
         <Dialog onClose={this.handleClose}
-          open={this.state.colPickerOpen}>
+          open={colPickerOpen}>
           <DialogTitle id="simple-dialog-title">
             Pick the columns you want to see in the Table Builder.
           </DialogTitle>
           <List>
-            {this.state.selectedColumns.map((col) => (
-              <ListItem button onClick={() => this.handleListItemClick(col)} key={col}>
+            {this.state.columns.map((col) => (
+              <ListItem button selected={this.state.selectedColumns.has(col)} onClick={() => this.handleListItemClick(col)} key={col}>
                 <ListItemText primary={col} />
               </ListItem>
             ))}
-            <ListItem autoFocus button onClick={() => this.handleListItemClick('addAccount')}>
-              <ListItemText primary="Add account" />
-            </ListItem>
           </List>
         </Dialog>
       </Box>
